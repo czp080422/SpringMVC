@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<beans:bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">      
+        <beans:property name="messageConverters">      
+            <beans:list >      
+                <beans:ref bean="mappingJacksonHttpMessageConverter" />      
+            </beans:list>      
+        </beans:property>      
+    </beans:bean>  
+    
+    <beans:bean id="mappingJacksonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">    
+    <beans:property name="supportedMediaTypes">    
+        <beans:list>    
+            <beans:value>application/json;charset=UTF-8</beans:value>    
+       </beans:list>    
+    </beans:property>  
+</beans:bean>  
+
+	<!-- 开启 Spring MVC @Controller设计模型 -->
+	<annotation-driven />
+
+	<!-- 处理HTTP GET请求 /resources/** 使之直接从 ${webappRoot}/resources文件夹下返回资源 -->
+	<resources mapping="/resources/**" location="/resources/" />
+
+	<!-- 配置视图解析器 把控制器返回的字符串解析为/WEB-INFO/views/下面的jsp页面 具体做法就是讲返回的字符串加上你指定的后缀.jsp -->
+	<beans:bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+	<!--配置SpringMVC扫描路径 -->
+	<context:component-scan base-package="com.czp.springmvc" />
+</beans:beans>
